@@ -1,11 +1,11 @@
 import React from 'react'
 
-function ButtonContainer({ handleChange, handleOperator, calculate, reset, changeSign }) {
+function ButtonContainer({ handleChange, handleOperator, calculate, reset, changeSign, percentage }) {
   return (
     <div className="button-container">
       <button className="color-gray" onClick={() => reset()}>C</button>
       <button className="color-gray" onClick={() => changeSign()}>+/-</button>
-      <button className="color-gray" >%</button>
+      <button className="color-gray" onClick={() => percentage()}>%</button>
       <button className="color-orange" onClick={() => handleOperator('/')}>/</button>
       <button className="color-dark" onClick={() => handleChange('7')}>7</button>
       <button className="color-dark" onClick={() => handleChange('8')}>8</button>

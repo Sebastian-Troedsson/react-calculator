@@ -12,15 +12,21 @@ function App() {
   const [expressionDone, setExpressionDone] = useState(false);
 
   const handleChange = (number) => {
-    if (expressionDone && !operator) {
-      reset();
-      setExpressionDone(false);
+    if (screenValue.split('').filter(x => x === '.').length === 1 && number === '.' && !nextValue) {
+      return;
     }
+
     if (nextValue) {
       setFirstValue(screenValue);
       setScreenValue('');
       setNextValue(false);
     }
+
+    if (expressionDone && !operator) {
+        reset();  
+        setExpressionDone(false);
+      }
+
     setScreenValue(prevState => prevState + number);
   };
 
@@ -30,15 +36,10 @@ function App() {
   }
 
   const calculate = () => {
-    try {
       setScreenValue(evaluate(firstValue + operator + screenValue).toString());
       setExpressionDone(true);    
       setFirstValue(null);
       setOperator(null);
-      /* Reset */
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const reset = () => {
@@ -46,7 +47,7 @@ function App() {
     setFirstValue(null);
     setOperator(null);
     setNextValue(false);
-  }
+  };
 
   const changeSign = () => {
     if (screenValue !== '' && screenValue[0] !== '-') {
@@ -54,19 +55,31 @@ function App() {
     } else {
       setScreenValue(prevState => prevState.slice(1));
     }
-  }
+  };
+
+  const percentage = () => {
+    if (screenValue.length !== 0) {
+      setScreenValue(prevState => evaluate('(' + prevState + ') / 100').toString());
+    }
+  };
 
   return (
     <div className="app">
-      {/* {console.log('ScreenValue:', screenValue),
+      {console.log('ScreenValue:', screenValue),
       console.log('FirstValue:', firstValue),
       console.log('Operator:', operator),
       console.log('NextValue:', nextValue),
       console.log('ExpressionDone:', expressionDone),
       console.log('-----------------------------')
-      } */}
+      }
       <Display screenValue={screenValue} setScreenValue={setScreenValue}/>
-      <ButtonContainer changeSign={changeSign} reset={reset} handleOperator={handleOperator} handleChange={handleChange} calculate={calculate}/>
+      <ButtonContainer 
+        percentage={percentage}
+        changeSign={changeSign} 
+        reset={reset} 
+        handleOperator={handleOperator} 
+        handleChange={handleChange} 
+        calculate={calculate}/>
     </div>
   );
 }
